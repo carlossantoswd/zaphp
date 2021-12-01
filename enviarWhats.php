@@ -63,6 +63,10 @@ $tamanhArr = count($arrRec);
 			
 			$pesquisa =  $driver->findElement(WebDriverBy::xpath('//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button'));
         	$pesquisa->click();
+        	echo $arrRec[$i]["celular"];
+	        echo "<br>";
+	        echo $newFotoVideo;
+	        echo "<br>";
 	        sleep(3);
         	} catch (\Exception $e) {
 	    		echo "<pre>";print_r($e);echo "</pre>";exit;
