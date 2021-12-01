@@ -11,7 +11,7 @@
 <body>
     <h2 class="text-center my-5">Crie sua campanha!!</h2>
     <div class="container">
-        <form method="post" action="definirCampanha">
+        <form method="post" action="definirCampanha.php">
             <div class="form-group">
                 <input type="text" class="form-control" name="nomeCampanha" placeholder="Digite o nome da campanha sem espaços e sem caracteres diferenciais">
             </div>
