@@ -34,6 +34,7 @@ $desiredcapabilities->setCapability(ChromeOptions::CAPABILITY, $chromeOptions);
 $desiredcapabilities->setCapability('acceptSslCerts', false);
 $desiredcapabilities->setCapability('VERSION', "2.45");
 $driver = RemoteWebDriver::create($host, $desiredcapabilities);
+
 // Host default
 
 $arrRec = dadosExcel(); 
@@ -41,45 +42,31 @@ $arrRec = dadosExcel();
 $url = 'https://web.whatsapp.com/';
 $driver->get($url);
 $pesquisa = $driver->findElement(WebDriverBy::id('app'));
-sleep(30);
+sleep(20);
 echo "conecte QRcode";
 echo "<br>";
 
 $tamanhArr = count($arrRec);
     for($i = 0; $i < $tamanhArr; $i++){
         $block = 'block';
-        $url = 'https://web.whatsapp.com/send?phone='.$arrRec[$i]["celular"];
-        $driver->get($url);
+        if(!empty($arrRec[$i]["celular"])) {
+        	try {
 
-        echo $arrRec[$i]["celular"];
-        echo "<br>";
-        echo $newFotoVideo;
-        echo "<br>";
-        sleep(8);
-        $pesquisa =  $driver->findElement(WebDriverBy::xpath('//*[@id="side"]/div[1]/div/button'));
-        $pesquisa->click();
-        
-        $pesquisa->sendKeys($mensagem);
-        $pesquisa->sendKeys(array(WebDriverKeys::ENTER)); 
-        sleep(3);
-    
-        $upload = $driver->findElement(WebDriverBy::xpath('//*[@id="main"]/header/div[3]/div/div[2]/div/span'));
-        $upload->click();
-        sleep(1);
-        //$galeria = $driver->findElement(WebDriverBy::xpath('//*[@id="main"]/header/div[3]/div/div[2]/span/div/div/ul/li[1]/input'));
-        $driver->executeScript('document.querySelector("#main header div._1i0-u div div.rAUz7._3TbsN span div div ul li:nth-child(1) input").style.display="block";');
-        //$galeria->click();
-        sleep(5);
+        	$url = "https://web.whatsapp.com/send?phone={$arrRec[$i]["celular"]}&text={$mensagem}";
 
-        $fileInput = $driver->findElement(WebDriverBy::xpath('//*[@id="main"]/header/div[3]/div/div[2]/span/div/div/ul/li[1]/input'));
+        	$driver->get($url);
 
-        $fileInput->setFileDetector(new LocalFileDetector());
-      
-        $fileInput->sendKeys($newFotoVideo);
-        sleep(1);
-        $fileEnviar = $driver->findElement(WebDriverBy::xpath('//*[@id="app"]/div/div/div[2]/div[2]/span/div/span/div/div/div[2]/div/span/div/div[2]/div/div[3]/div[1]/div[2]'));
-        sleep(1);
-        $fileEnviar->sendKeys(array(WebDriverKeys::ENTER)); 
-        sleep(5);
+        	sleep(3);
+	        $driver->wait()->until(
+			    WebDriverExpectedCondition::presenceOfElementLocated(WebDriverBy::xpath('//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button'))
+			);
+			
+			$pesquisa =  $driver->findElement(WebDriverBy::xpath('//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button'));
+        	$pesquisa->click();
+	        sleep(3);
+        	} catch (\Exception $e) {
+	    		echo "<pre>";print_r($e);echo "</pre>";exit;
+            }
+        }
     }     
 ?>
